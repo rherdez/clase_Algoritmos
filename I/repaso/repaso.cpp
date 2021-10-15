@@ -3,10 +3,10 @@
 /* run this program using the console pauser or add your own getch, system("pause") or input loop */
 using namespace std;
 
-mi_matematica m;
-int main(int argc, char** argv) {
 
-	cout<<"Resultado: "<<m.expo(2,3)<<endl;
+int main(int argc, char** argv) {
+	mi_matematica m(2,3);
+	cout<<"Resultado: "<<m.expo()<<endl;
 	
 	return 0;
 }
