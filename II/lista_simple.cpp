@@ -8,7 +8,7 @@
 
 /* run this program using the console pauser or add your own getch, system("pause") or input loop */
 using namespace std;
-nodo *I,*T,*F;
+nodo *I,*T,*F,*A;
 int op;
 unsigned t0, t1;
 double t=0;
@@ -19,9 +19,12 @@ int mayor();
 void buscar(int x);
 void modificar(int);
 void leer();
+void guardar();
+void borrar();
 
 int main(int argc, char** argv) {
 	int x;
+	string y;
 	do{
 		cout<<"Menu"<<endl;
 		cout<<"1) Agregar"<<endl;
@@ -30,6 +33,8 @@ int main(int argc, char** argv) {
 		cout<<"4) Buscar"<<endl;
 		cout<<"5) Modificar"<<endl;
 		cout<<"6) Leer"<<endl;
+		cout<<"7) Guardar"<<endl;
+		cout<<"8) Borrar"<<endl;
 		cout<<"0) Salir"<<endl;
 		cin>>op;
 		
@@ -37,7 +42,9 @@ int main(int argc, char** argv) {
 			case 1:
 				cout<<"Ingrese un nuevo numero"<<endl;
 				cin>>x;
-				agregar(x);
+				cout<<"Ingrese un nombre"<<endl;
+				cin>>y;
+				agregar(x,y);
 				break;
 			case 2:
 				presentar();
@@ -62,7 +69,12 @@ int main(int argc, char** argv) {
  
 				 t = (double(t1-t0)/CLOCKS_PER_SEC);
 				cout << "Execution Time: " << t << endl;
-
+				break;
+			case 7:
+				guardar();
+				break;
+			case 8:
+				borrar();
 				break;
 			case 0:
 				break;
@@ -79,16 +91,52 @@ void ordenar(){
 	
 	
 }
+void borrar(){
+	int x;
+	cout<<"Ingrese el ID a Eliminar"	<<endl;
+	cin>>x;
+	buscar(x);
+	if(T!=NULL){
+		if(T==I){
+			I=I->sig;
+			T=I;
+		}else if(T==F){
+			A->sig=NULL;
+			F=A;
+			T=A;
+		}else{
+			A->sig=T->sig;
+			T->sig=NULL;
+			
+			
+		}
+	}
+}
+void guardar(){
+	ofstream archivo;
+	//archivo.open("C:\\textos\\motagua.txt",std::ofstream::app);
+	archivo.open("C:\\textos\\motagua.txt");
+	T=I;
+	
+	while(T!=NULL){
+	
+		archivo<<T->id<<"\n";		
+		archivo<<T->nombre<<"\n";
+		T=T->sig;
+	}
+	archivo.close();
+}
+
 void leer(){
-	ifstream fe("C:\\textos\\ejemplo_mil.txt");
+	ifstream fe("C:\\textos\\motagua.txt");
 	char id[128];
 	char nombre[128];
 	while(!fe.eof()){
 		fe>>id;
 		fe>>nombre;
-
-		agregar(atoi(id),nombre);
-
+		if(!fe.eof()){		
+			agregar(atoi(id),nombre);
+		}
 		
 	}
 	cout<<"Leido"<<endl;
@@ -106,6 +154,7 @@ void modificar(int x){
 void agregar(int x){
 	T=new nodo();
 	T->id=x;
+	
 	T->sig=NULL;
 	
 	if(I==NULL){
@@ -154,6 +203,7 @@ void buscar(int x){
 		//int n; 
 		//n=x
 	T=I;
+	A=T;
 	while(T!=NULL && !search){
 		if((T->id) == x ){
 			search = true;
@@ -163,6 +213,7 @@ void buscar(int x){
 			//T=T->sig;
 		}
 		else{
+			A=T;
 			T=T->sig;
 		}
 	}
